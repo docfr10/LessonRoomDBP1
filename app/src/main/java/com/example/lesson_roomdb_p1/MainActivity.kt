@@ -1,5 +1,7 @@
 package com.example.lesson_roomdb_p1
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import com.example.lesson_roomdb_p1.ui.theme.LessonRoomDBP1Theme
 
@@ -30,6 +32,9 @@ class MainActivity : ComponentActivity() {
                 val name = remember { mutableStateOf("") }
                 val number = remember { mutableStateOf("") }
                 val db = DB(this)
+                val activity = LocalContext.current as Activity
+
+                val sharedPreferences = activity.getSharedPreferences("value", Context.MODE_PRIVATE)
 
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -59,6 +64,21 @@ class MainActivity : ComponentActivity() {
                             Log.d("SIZE", db.getAll("RESULT DESC").size.toString())
                             for (d in db.getAll("RESULT DESC")) {
                                 Text(text = ("${d.name} ${d.number}\n"))
+                            }
+                        }
+                        item {
+                            Text(text = sharedPreferences.getString("value", "value1").toString())
+                            Button(onClick = {
+                                sharedPreferences.edit().putString("value", "value2").apply()
+                                activity.finish()
+                            }) {
+                                Text(text = "Change value to value2")
+                            }
+                            Button(onClick = {
+                                sharedPreferences.edit().putString("value", "value3").apply()
+                                activity.finish()
+                            }) {
+                                Text(text = "Change value to value3")
                             }
                         }
                     })
