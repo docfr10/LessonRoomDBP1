@@ -3,7 +3,6 @@ package com.example.lesson_roomdb_p1
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -60,11 +60,8 @@ class MainActivity : ComponentActivity() {
                             ).show()
                     }) { Text(text = "Write") }
                     LazyColumn(content = {
-                        items(1) {
-                            Log.d("SIZE", db.getAll("RESULT DESC").size.toString())
-                            for (d in db.getAll("RESULT DESC")) {
-                                Text(text = ("${d.name} ${d.number}\n"))
-                            }
+                        items(db.getAll("RESULT DESC")) {
+                            Text(text = ("${it.name} ${it.number}\n"))
                         }
                         item {
                             Text(text = sharedPreferences.getString("value", "value1").toString())
